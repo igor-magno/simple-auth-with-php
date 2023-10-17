@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  app:
+
+services:
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT:-3306}:3306
+    networks:
+      - app
+
+  server:
+    build: .
+    volumes:
+      - ./src:/var/www/html
+    ports:
+     - ${APP_PORT:-80}:80
+    env_file:
+      - .env
+    networks:
+      - app
